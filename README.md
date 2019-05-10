@@ -16,7 +16,7 @@ WrenJS.on('ready', () => {
   })
   
   // Interpret a small script and handle the result.
-  vm.interpret("main", 'System.print("Hello xorld!"').then(result => {
+  vm.interpret("main", 'System.print("Hello xorld!")').then(result => {
   
     if (result == WrenJS.RESULT_COMPILE_ERROR) {
       console.error("Compilation error!")
