@@ -15,7 +15,6 @@ project "WrenJS+"
   includedirs { "src", "src/wren/src/**" }
 
   defines { "WREN_OPT_RANDOM" }
-  defines { "IMPORT_FROM_JSVM", "IMPORT_FROM_FETCH", "LIMIT_FETCH_TO_SCRIPTS" }
 
   -- Runtime methods to export to the emscripten module.
   runtime_methods = {'cwrap', 'addFunction'}

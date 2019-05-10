@@ -5,14 +5,7 @@
 #include <emscripten.h>
 #include <emscripten/fetch.h>
 
-// Notes on these definitions and their limitations:
-//   * IMPORT_FROM_JSVM
-//     * Import scripts are only available if they were passed to a VM instance via importFile or importFiles.
-//   * IMPORT_FROM_FETCH
-//     * Allows the use of emscripten fetching. Unless LIMIT_FETCH_TO_SCRIPTS is enabled this will be unrestricted.
-//   * LIMIT_FETCH_TO_SCRIPTS
-//     * This limits fetching to only wren scripts defined in the head as script tags.
-#if defined (IMPORT_FROM_FETCH) || defined (IMPORT_FROM_JSVM)
+#if !defined(DISABLE_FETCH_IMPORT) || !defined(DISABLE_JSVM_IMPORT)
 #define CAN_IMPORT
 #else
 #warning "No module importing method enabled. Wren imports will be nonfunctional."
@@ -25,15 +18,15 @@ extern "C" {
   extern WrenForeignMethodFn WrenJS_getForeignMethod(WrenVM*, const char*, const char*, bool, const char*);
   extern WrenForeignMethodFn WrenJS_getForeignClassAllocator(WrenVM*, const char*, const char*);
   extern WrenFinalizerFn WrenJS_getForeignClassFinalizer(WrenVM*, const char*, const char*);
-#ifdef LIMIT_FETCH_TO_SCRIPTS
+#if !defined(ALLOW_NONSCRIPT_FETCH)
   extern bool WrenJS_isFileAvailable(const char *);
 #endif
-#ifdef IMPORT_FROM_JSVM
+#if !defined(DISABLE_JSVM_IMPORT)
   extern void WrenJS_importFileFromVM(WrenVM*, const char *, char**, int*);
 #endif
 }
 
-#ifdef IMPORT_FROM_FETCH
+#if !defined(DISABLE_FETCH_IMPORT)
 
 short fetchLock = 0;
 short fetchSuccess = 0;
@@ -85,15 +78,15 @@ char* loadModuleFn(WrenVM* vm, const char* name) {
   memcpy(fullName+strlen(name), ".wren", strlen(".wren"));
   fullName[fullSize-1] = '\0';
 
-  #ifdef IMPORT_FROM_JSVM
+  #if !defined(DISABLE_JVM_IMPORT)
   WrenJS_importFileFromVM(vm, fullName, &data, &bytes);
   if (data != NULL && bytes > 0) {
     free(fullName);
     return data;
   }
   #endif
-  #ifdef IMPORT_FROM_FETCH
-  #ifdef LIMIT_FETCH_TO_SCRIPTS
+  #if !defined(DISABLE_FETCH_IMPORT)
+  #if !defined(ALLOW_NONSCRIPT_FETCH)
   if (!WrenJS_isFileAvailable(fullName)) {
     free(fullName);
     return data;
