@@ -1,4 +1,3 @@
-(function(){
 // WrenVM is the class that the user interacts with after creating one
 // via WrenJS.NewVM(config).
 class WrenVM {
@@ -11,7 +10,7 @@ class WrenVM {
     this.foreignFunctions = {}
     this.foreignClasses = {}
 
-    // This could, and probably should, use a cached value from window.WrenJS.
+    // This could, and probably should, use a cached value from WrenJS.
     this.interpretFn = Module.cwrap('wrenInterpret', 'number', ['number', 'string', 'string'], {async: true})
     //this.callFn = Module.cwrap('wrenCall', 'number', ['number', 'number'], {async: true})
     this.callFn = Module.cwrap('wrenCall', 'number', ['number', 'number'], {async: false})
@@ -30,7 +29,7 @@ class WrenVM {
   }
 
   free() {
-    window.WrenJS.freeVM(this.ID)
+    Module.freeVM(this.ID)
   }
 
   addForeignMethod(module, className, isStatic, signature, cb) {
@@ -232,75 +231,112 @@ class WrenVM {
     return this.importedFiles[file]
   }
 }
-window.WrenJS = {
-  // Event functionality
-  _listeners: {},
-  addEventListener: function(t, cb) {
-    if (!(t in window.WrenJS._listeners)) {
-      window.WrenJS._listeners[t] = []
+
+Module._listeners = {}
+// Browser-esque listener implementation.
+if (typeof window !== 'undefined') {
+  Module.on = Module.addEventListener = function(t, cb) {
+    if (!(t in Module._listeners)) {
+      Module._listeners[t] = []
     }
-    window.WrenJS._listeners[t].push(cb)
-  },
-  removeEventListener: function(t, cb) {
-    if (!(t in window.WrenJS._listeners)) {
+    Module._listeners[t].push(cb)
+  }
+  Module.off = Module.removeEventListener = function(t, cb) {
+      if (!(t in Module._listeners)) {
+        return
+      }
+      var stack = Module._listeners[t]
+      for (var i = 0, l = stack.length; i < l; i++) {
+        if (stack[i] === cb) {
+          stack.splice(i, 1)
+          return
+        }
+      }
+  }
+  Module.emit = Module.dispatchEvent = function(e) {
+    if (!(e.type in Module._listeners)) {
+      return true
+    }
+    var stack = Module._listeners[e.type].slice()
+
+    for (var i = 0, l = stack.length; i < l; i++) {
+      stack[i].call(Module, e)
+    }
+    return !e.defaultPrevented
+  }
+  window.WrenJS = Module
+}
+
+// Node-esque listener implementation.
+if (typeof module !== 'undefined') {
+  Module.on = Module.addListener = function(t, cb) {
+    if (!(t in Module._listeners)) {
+      Module._listeners[t] = []
+    }
+    Module._listeners[t].push(cb)
+  }
+  Module.off = Module.removeListener = function(t, cb) {
+    if (!(t in Module._listeners)) {
       return
     }
-    var stack = window.WrenJS._listeners[t]
+    var stack = Module._listeners[t]
     for (var i = 0, l = stack.length; i < l; i++) {
       if (stack[i] === cb) {
         stack.splice(i, 1)
         return
       }
     }
-  },
-  dispatchEvent: function(e) {
-    if (!(e.type in window.WrenJS._listeners)) {
+  }
+  Module.emit = function(t) {
+    if (!(t in Module._listeners)) {
       return true
     }
-    var stack = window.WrenJS._listeners[e.type].slice()
+    var stack = Module._listeners[t].slice()
 
     for (var i = 0, l = stack.length; i < l; i++) {
-      stack[i].call(window.WrenJS, e)
+      stack[i].call(Module, t)
     }
-    return !e.defaultPrevented
-  },
-  // Internals
-  _isInitialized: false,
-  _VMs: {},
-  _addVM: function(vm) {
-    return window.WrenJS._VMs[vm.ID] = vm
-  },
-  freeVM: function(id) {
-    if (window.WrenJS._VMs[id]) {
-      Module._freeWrenVM(id)
-      delete window.WrenJS._VMs[id]
-    }
-  },
-  getVM: function(id) {
-    return window.WrenJS._VMs[id]
-  },
-  // Public
-  newVM: function(config) {
-    return window.WrenJS._addVM(new WrenVM(Module._makeWrenVM(), config || {}))
-  },
+  }
+  module.exports = Module
 }
+
+Module._VMs = {}
+Module._addVM = function(vm) {
+  return Module._VMs[vm.ID] = vm
+}
+
+Module.freeVM = function(id) {
+  if (Module._VMs[id]) {
+    Module._freeWrenVM(id)
+    delete Module._VMs[id]
+  }
+}
+Module.getVM = function(id) {
+  return Module._VMs[id]
+}
+
+Module.newVM = function(config) {
+  return Module._addVM(new WrenVM(Module._makeWrenVM(), config || {}))
+}
+
 // Let's add a listener for ready ourselves so we can get appropriate constants
-window.WrenJS.addEventListener('ready', function() {
+Module.on('ready', function() {
   // Get our WrenInterpretResults
-  window.WrenJS.RESULT_COMPILE_ERROR = Module._getWrenResultCompileError()
-  window.WrenJS.RESULT_RUNTIME_ERROR = Module._getWrenResultRuntimeError()
-  window.WrenJS.RESULT_SUCCESS       = Module._getWrenResultSuccess()
+  Module.RESULT_COMPILE_ERROR = Module._getWrenResultCompileError()
+  Module.RESULT_RUNTIME_ERROR = Module._getWrenResultRuntimeError()
+  Module.RESULT_SUCCESS       = Module._getWrenResultSuccess()
   // Get our WrenTypes
-  window.WrenJS.TYPE_BOOL            = Module._getWrenTypeBool()
-  window.WrenJS.TYPE_NUM             = Module._getWrenTypeNum()
-  window.WrenJS.TYPE_FOREIGN         = Module._getWrenTypeForeign()
-  window.WrenJS.TYPE_LIST            = Module._getWrenTypeList()
-  window.WrenJS.TYPE_NULL            = Module._getWrenTypeNull()
-  window.WrenJS.TYPE_STRING          = Module._getWrenTypeString()
-  window.WrenJS.TYPE_UNKNOWN         = Module._getWrenTypeUnknown()
+  Module.TYPE_BOOL            = Module._getWrenTypeBool()
+  Module.TYPE_NUM             = Module._getWrenTypeNum()
+  Module.TYPE_FOREIGN         = Module._getWrenTypeForeign()
+  Module.TYPE_LIST            = Module._getWrenTypeList()
+  Module.TYPE_NULL            = Module._getWrenTypeNull()
+  Module.TYPE_STRING          = Module._getWrenTypeString()
+  Module.TYPE_UNKNOWN         = Module._getWrenTypeUnknown()
   // Get our WrenErrorTypes
-  window.WrenJS.ERROR_COMPILE        = Module._getWrenErrorCompile()
-  window.WrenJS.ERROR_RUNTIME        = Module._getWrenErrorRuntime()
-  window.WrenJS.ERROR_STACK_TRACE    = Module._getWrenErrorStackTrace()
+  Module.ERROR_COMPILE        = Module._getWrenErrorCompile()
+  Module.ERROR_RUNTIME        = Module._getWrenErrorRuntime()
+  Module.ERROR_STACK_TRACE    = Module._getWrenErrorStackTrace()
 })
+
 })()

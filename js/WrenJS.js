@@ -1,18 +1,18 @@
 var LibraryWren = {
   WrenJS_errorFn: function(id, type, module, line, message) {
-    var vm = window.WrenJS.getVM(id)
+    var vm = Module.getVM(id)
     if (vm) {
       vm.errorFn(type, UTF8ToString(module), line, UTF8ToString(message))
     }
   },
   WrenJS_writeFn: function(id, text) {
-    var vm = window.WrenJS.getVM(id)
+    var vm = Module.getVM(id)
     if (vm) {
       vm.writeFn(UTF8ToString(text))
     }
   },
   WrenJS_getForeignMethod: function(id, module, className, isStatic, signature) {
-    var vm = window.WrenJS.getVM(id)
+    var vm = Module.getVM(id)
     if (vm) {
       // This should return > 0 if it exists. 0 if it does not.
       var funcID = vm.getForeignMethod(UTF8ToString(module), UTF8ToString(className), isStatic, UTF8ToString(signature))
@@ -21,14 +21,14 @@ var LibraryWren = {
     return 0
   },
   WrenJS_getForeignClassAllocator: function(id, module, className) {
-    var vm = window.WrenJS.getVM(id)
+    var vm = Module.getVM(id)
     if (vm) {
       return vm.getForeignClassAllocator(UTF8ToString(module), UTF8ToString(className))
     }
     return 0
   },
   WrenJS_getForeignClassFinalizer: function(id, module, className) {
-    var vm = window.WrenJS.getVM(id)
+    var vm = Module.getVM(id)
     if (vm) {
       return vm.getForeignClassFinalizer(UTF8ToString(module), UTF8ToString(className))
     }
@@ -49,7 +49,7 @@ var LibraryWren = {
   // importFileFromVM is a call to request a VM-defined wren `import "..."`.
   // This is only used if WrenJS+ was built with IMPORT_FROM_JSVM.
   WrenJS_importFileFromVM: function(vm, file, return_string, return_bytes) {
-    var vm = window.WrenJS.getVM(vm)
+    var vm = Module.getVM(vm)
     if (vm) {
       var text = vm.getImportedFile(UTF8ToString(file))
       if (!text) return

@@ -87,3 +87,6 @@ Note that if you wish to not use fetching at all, it is recommended that you rem
   * `EMTERPRETIFY_ASYNC=1`
     
 Removing these will allow emscripten to run asynchronously which should be faster.
+
+### Node Compilation
+To compile for Node you must disable XHR fetching as emscripten's fetch system does not support the Node environment.
