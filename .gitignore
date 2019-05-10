@@ -1,0 +1,7 @@
+dist
+bin
+obj
+emsdk
+src/wren
+Makefile
+*.make
