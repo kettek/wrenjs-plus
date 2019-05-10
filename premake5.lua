@@ -1,4 +1,3 @@
---
 workspace "WrenJS+"
   configurations { "Debug", "Release" }
 
@@ -66,13 +65,15 @@ project "WrenJS+"
     'RESERVED_FUNCTION_POINTERS=' .. reserved_function_pointers
   }
 
-  postbuildcommands { "{MKDIR} dist", [[emcc -s ]] .. table.concat(emscripten_flags, " -s ") .. [[ --pre-js %{cfg.basedir}/js/WrenJS-pre.js --post-js %{cfg.basedir}/js/WrenJS-post.js --js-library %{cfg.basedir}/js/WrenJS.js bin/%{cfg.buildcfg}/%{cfg.targetname}%{cfg.targetextension} -o %{cfg.basedir}/dist/%{cfg.targetname}.js]] }
-
+  -- Configurations for Debug and Release
   filter "configurations:Debug"
     defines { "DEBUG" }
     symbols "On"
+    emscripten_optimizations = "-O0"
+    postbuildcommands { "{MKDIR} dist", [[emcc -s ]] .. table.concat(emscripten_flags, " -s ") .. [[ --pre-js %{cfg.basedir}/js/WrenJS-pre.js --post-js %{cfg.basedir}/js/WrenJS-post.js --js-library %{cfg.basedir}/js/WrenJS.js bin/%{cfg.buildcfg}/%{cfg.targetname}%{cfg.targetextension} ]] .. emscripten_optimizations .. [[ -o %{cfg.basedir}/dist/%{cfg.targetname}.js]] }
 
   filter "configurations:Release"
     defines { "NDEBUG" }
     optimize "On"
-
+    emscripten_optimizations = "-O3"
+    postbuildcommands { "{MKDIR} dist", [[emcc -s ]] .. table.concat(emscripten_flags, " -s ") .. [[ --pre-js %{cfg.basedir}/js/WrenJS-pre.js --post-js %{cfg.basedir}/js/WrenJS-post.js --js-library %{cfg.basedir}/js/WrenJS.js bin/%{cfg.buildcfg}/%{cfg.targetname}%{cfg.targetextension} ]] .. emscripten_optimizations .. [[ -o %{cfg.basedir}/dist/%{cfg.targetname}.js]] }
