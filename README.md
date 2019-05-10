@@ -86,7 +86,9 @@ Providing premake5 and emsdk are setup properly, building is extremely easy:
 ...
 ```
 
-Providing the above commands worked without issue (and if they did not, please report it), you will have a built and ready to use `WrenJS+.js` file in the `dist/` directory.
+This will compile the debug release per default. If you wish to compile a release, set the `config` environment variable to "release" prior to running `emmake make`. For example, under fish: `env config="release" emmake make`.
+
+Providing the above commands worked without issue (and if they did not, please report it), you will have built and ready to use `WrenJS+.js` and `WrenJS+.wasm` files in the `dist/` directory.
 
 ### Compilation flags
 WrenJS+ can have the following flags passed to it during building to restrict or implement particular features. Per default none of these are used.
