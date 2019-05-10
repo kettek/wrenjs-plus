@@ -56,6 +56,8 @@ project "WrenJS+"
   reserved_function_pointers = 1000
   -- These are the flags to pass to emcc.
   emscripten_flags = {
+    'MODULARIZE_INSTANCE=1',
+    [[EXPORT_NAME='WrenJS']],
     'FETCH=1',
     'EMTERPRETIFY=1',
     'EMTERPRETIFY_ASYNC=1',

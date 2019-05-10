@@ -1,5 +1,5 @@
 // WrenVM is the class that the user interacts with after creating one
-// via WrenJS.NewVM(config).
+// via WrenJS.newVM(config).
 class WrenVM {
   /**
    * Constructor for WrenVM.
@@ -16,9 +16,9 @@ class WrenVM {
     this.foreignClasses = {}
 
     // This could, and probably should, use a cached value from WrenJS.
-    this.interpretFn = Module.cwrap('wrenInterpret', 'number', ['number', 'string', 'string'], {async: true})
-    //this.callFn = Module.cwrap('wrenCall', 'number', ['number', 'number'], {async: true})
-    this.callFn = Module.cwrap('wrenCall', 'number', ['number', 'number'], {async: false})
+    this.interpretFn = WrenJS.cwrap('wrenInterpret', 'number', ['number', 'string', 'string'], {async: true})
+    //this.callFn = WrenJS.cwrap('wrenCall', 'number', ['number', 'number'], {async: true})
+    this.callFn = WrenJS.cwrap('wrenCall', 'number', ['number', 'number'], {async: false})
 
     // importedFiles is a file->source map used for VM-based imports via importFile(s).
     this.importedFiles = {}
@@ -46,7 +46,7 @@ class WrenVM {
    * Frees up the VM. You must call `releaseHandle` on all your handles first.
    */
   free() {
-    Module.freeVM(this.ID)
+    WrenJS.freeVM(this.ID)
   }
 
   /**
@@ -68,7 +68,7 @@ class WrenVM {
       this.foreignFunctions[module][className][isStatic] = {}
     }
     if (!this.foreignFunctions[module][className][isStatic][signature]) {
-      this.foreignFunctions[module][className][isStatic][signature] = Module.addFunction(cb)
+      this.foreignFunctions[module][className][isStatic][signature] = WrenJS.addFunction(cb)
     } else {
       console.log("FIXME: foreign method defined twice")
     }
@@ -108,8 +108,8 @@ class WrenVM {
     }
     if (!this.foreignClasses[module][className]) {
       this.foreignClasses[module][className] = {
-        allocator: Module.addFunction(allocator),
-        finalizer: Module.addFunction(finalizer),
+        allocator: WrenJS.addFunction(allocator),
+        finalizer: WrenJS.addFunction(finalizer),
       }
     } else {
       console.log("FIXME: foreign class defined twice")
@@ -143,21 +143,21 @@ class WrenVM {
    * Calls the VM's garbage collection routine.
    */
   collectGarbage() {
-    Module._wrenCollectGarbage(this.ID)
+    WrenJS._wrenCollectGarbage(this.ID)
   }
   /**
    * Ensures that the VM has the defined amount of slots available for use.
    * @param {number} count 
    */
   ensureSlots(count) {
-    Module._wrenEnsureSlots(this.ID, count)
+    WrenJS._wrenEnsureSlots(this.ID, count)
   }
   /**
    * Gets the amount of slots currently used.
    * @returns {number}
    */
   getSlotCount() {
-    return Module._wrenGetSlotCount(this.ID)
+    return WrenJS._wrenGetSlotCount(this.ID)
   }
   /**
    * Returns the WrenType stored in a given slot.
@@ -165,7 +165,7 @@ class WrenVM {
    * @returns {number}
    */
   getSlotType(slot) {
-    return Module._wrenGetSlotType(this.ID, slot)
+    return WrenJS._wrenGetSlotType(this.ID, slot)
   }
   /**
    * Returns a floating point number stored in a given slot.
@@ -173,7 +173,7 @@ class WrenVM {
    * @returns {number}
    */
   getSlotDouble(slot) {
-    return Module._wrenGetSlotDouble(this.ID, slot)
+    return WrenJS._wrenGetSlotDouble(this.ID, slot)
   }
   /**
    * Sets the given slot to the provided floating point number.
@@ -181,7 +181,7 @@ class WrenVM {
    * @param {number} value 
    */
   setSlotDouble(slot, value) {
-    Module._wrenSetSlotDouble(this.ID, slot, value)
+    WrenJS._wrenSetSlotDouble(this.ID, slot, value)
   }
   /**
    * Returns a string stored in the given slot.
@@ -189,7 +189,7 @@ class WrenVM {
    * @returns {string}
    */
   getSlotString(slot) {
-    return UTF8ToString(Module._wrenGetSlotString(this.ID, slot))
+    return UTF8ToString(WrenJS._wrenGetSlotString(this.ID, slot))
   }
   /**
    * Sets the given slot to the provided string.
@@ -200,7 +200,7 @@ class WrenVM {
     var strLen = lengthBytesUTF8(string)
     var strOnHeap = _malloc(strLen+1)
     stringToUTF8(string, strOnHeap, strLen+1)
-    Module._wrenSetSlotString(this.ID, slot, strOnHeap)
+    WrenJS._wrenSetSlotString(this.ID, slot, strOnHeap)
     _free(strOnHeap)
   }
   /**
@@ -210,7 +210,7 @@ class WrenVM {
    */
   getSlotBytes(slot) {
     var lenPtr    = _malloc(4) // ??
-    var bytesPtr  = Module._wrenGetSlotBytes(this.ID, slot, lenPtr)
+    var bytesPtr  = WrenJS._wrenGetSlotBytes(this.ID, slot, lenPtr)
     var length    = getValue(lenPtr, 'i32')
     _free(lenPtr)
 
@@ -231,10 +231,10 @@ class WrenVM {
     // Assuming we have a proper typedArray here
     var numBytes  = typedArray.length * typedArray.BYTES_PER_ELEMENT
     var ptr       = _malloc(numBytes)
-    var heapBytes = new Uint8Array(Module.HEAPU8.buffer, ptr, numBytes)
+    var heapBytes = new Uint8Array(WrenJS.HEAPU8.buffer, ptr, numBytes)
     heapBytes.set(new Uint8Array(typedArray.buffer))
 
-    Module._wrenSetSlotBytes(this.ID, slot, heapBytes.byteOffset, heapBytes.length)
+    WrenJS._wrenSetSlotBytes(this.ID, slot, heapBytes.byteOffset, heapBytes.length)
 
     _free(heapBytes.byteOffset)
   }
@@ -244,7 +244,7 @@ class WrenVM {
    * @returns {boolean}
    */
   getSlotBool(slot) {
-    return Module._wrenGetSlotBool(this.ID, slot)
+    return WrenJS._wrenGetSlotBool(this.ID, slot)
   }
   /**
    * Sets the given slot to the provided boolean value.
@@ -252,14 +252,14 @@ class WrenVM {
    * @param {boolean} value 
    */
   setSlotBool(slot, value) {
-    Module._wrenSetSlotBool(this.ID, slot, value)
+    WrenJS._wrenSetSlotBool(this.ID, slot, value)
   }
   /**
    * Sets the given slot to null.
    * @param {number} slot 
    */
   setSlotNull(slot) {
-    Module._wrenSetSlotNull(this.ID, slot)
+    WrenJS._wrenSetSlotNull(this.ID, slot)
   }
   /**
    * Returns a foreign object from the provided slot.
@@ -267,7 +267,7 @@ class WrenVM {
    * @returns {number}
    */
   getSlotForeign(slot) {
-    return Module._wrenGetSlotForeign(this.ID, slot)
+    return WrenJS._wrenGetSlotForeign(this.ID, slot)
   }
   /**
    * Sets the given slot to a new foreign object with an optional size for extra bytes storage.
@@ -277,14 +277,14 @@ class WrenVM {
    * @returns {number} pointer to the extra bytes.
    */
   setSlotNewForeign(slot, classSlot, size) {
-    return Module._wrenSetSlotNewForeign(this.ID, slot, classSlot, size)
+    return WrenJS._wrenSetSlotNewForeign(this.ID, slot, classSlot, size)
   }
   /**
    * Sets the given slot to a new list.
    * @param {number} slot 
    */
   setSlotNewList(slot) {
-    Module._wrenSetSlotNewList(this.ID, slot)
+    WrenJS._wrenSetSlotNewList(this.ID, slot)
   }
   /**
    * Returns the number of items in a list in the given slot.
@@ -292,7 +292,7 @@ class WrenVM {
    * @returns {number}
    */
   getListCount(slot) {
-    return Module._wrenGetListCount(this.ID, slot)
+    return WrenJS._wrenGetListCount(this.ID, slot)
   }
   /**
    * Moves an element from the given listSlot's index to target elementSlot.
@@ -301,7 +301,7 @@ class WrenVM {
    * @param {number} elementSlot 
    */
   getListElement(listSlot, index, elementSlot) {
-    Module._wrenGetListElement(this.ID, listSlot, index, elementSlot)
+    WrenJS._wrenGetListElement(this.ID, listSlot, index, elementSlot)
   }
   /**
    * Inserts the provided element in elementSlot into the index position in the list at slot.
@@ -310,7 +310,7 @@ class WrenVM {
    * @param {number} elementSlot
    */
   insertInList(slot, index, elementSlot) {
-    Module._wrenInsertInList(this.ID, slot, index, elementSlot)
+    WrenJS._wrenInsertInList(this.ID, slot, index, elementSlot)
   }
   /**
    * Gets a variable of the provided name in a module and sets it to the given slot.
@@ -326,7 +326,7 @@ class WrenVM {
     var nameOnHeap = _malloc(nameLen+1)
     stringToUTF8(name, nameOnHeap, nameLen+1)
 
-    Module._wrenGetVariable(this.ID, moduleOnHeap, nameOnHeap, slot)
+    WrenJS._wrenGetVariable(this.ID, moduleOnHeap, nameOnHeap, slot)
 
     _free(nameOnHeap)
     _free(moduleOnHeap)
@@ -337,7 +337,7 @@ class WrenVM {
    * @returns {number}
    */
   getSlotHandle(slot) {
-    return Module._wrenGetSlotHandle(this.ID, slot)
+    return WrenJS._wrenGetSlotHandle(this.ID, slot)
   }
   /**
    * Sets the given slot to the given handle.
@@ -345,7 +345,7 @@ class WrenVM {
    * @param {number} handle 
    */
   setSlotHandle(slot, handle) {
-    Module._wrenSetSlotHandle(this.ID, slot, handle)
+    WrenJS._wrenSetSlotHandle(this.ID, slot, handle)
   }
   /**
    * Creates and returns a handle that is usable in functions such as `call(handle)`.
@@ -358,7 +358,7 @@ class WrenVM {
     var signatureOnHeap = _malloc(signatureLen+1)
     stringToUTF8(signature, signatureOnHeap, signatureLen+1)
 
-    var res = Module._wrenMakeCallHandle(this.ID, signatureOnHeap)
+    var res = WrenJS._wrenMakeCallHandle(this.ID, signatureOnHeap)
 
     _free(signatureOnHeap)
     return res
@@ -368,14 +368,14 @@ class WrenVM {
    * @param {number} handle 
    */
   releaseHandle(handle) {
-    Module._wrenReleaseHandle(this.ID, handle)
+    WrenJS._wrenReleaseHandle(this.ID, handle)
   }
   /**
    * Aborts the fiber.
    * @param {number} slot 
    */
   abortFiber(slot) {
-    Module._wrenAbortFiber(this.ID, slot)
+    WrenJS._wrenAbortFiber(this.ID, slot)
   }
   // importFile adds the given file as an importable module. It returns a Promise.
   // Only usable if the "IMPORT_JSVM_ENABLED" flag is enabled during compilation.
@@ -421,20 +421,20 @@ class WrenVM {
   }
 }
 
-Module._listeners = {}
+WrenJS._listeners = {}
 // Browser-esque listener implementation.
 if (typeof window !== 'undefined') {
-  Module.on = Module.addEventListener = function(t, cb) {
-    if (!(t in Module._listeners)) {
-      Module._listeners[t] = []
+  WrenJS.on = WrenJS.addEventListener = function(t, cb) {
+    if (!(t in WrenJS._listeners)) {
+      WrenJS._listeners[t] = []
     }
-    Module._listeners[t].push(cb)
+    WrenJS._listeners[t].push(cb)
   }
-  Module.off = Module.removeEventListener = function(t, cb) {
-      if (!(t in Module._listeners)) {
+  WrenJS.off = WrenJS.removeEventListener = function(t, cb) {
+      if (!(t in WrenJS._listeners)) {
         return
       }
-      var stack = Module._listeners[t]
+      var stack = WrenJS._listeners[t]
       for (var i = 0, l = stack.length; i < l; i++) {
         if (stack[i] === cb) {
           stack.splice(i, 1)
@@ -442,33 +442,33 @@ if (typeof window !== 'undefined') {
         }
       }
   }
-  Module.emit = Module.dispatchEvent = function(e) {
-    if (!(e.type in Module._listeners)) {
+  WrenJS.emit = WrenJS.dispatchEvent = function(e) {
+    if (!(e.type in WrenJS._listeners)) {
       return true
     }
-    var stack = Module._listeners[e.type].slice()
+    var stack = WrenJS._listeners[e.type].slice()
 
     for (var i = 0, l = stack.length; i < l; i++) {
-      stack[i].call(Module, e)
+      stack[i].call(WrenJS, e)
     }
     return !e.defaultPrevented
   }
-  window.WrenJS = Module
+  window.WrenJS = WrenJS
 }
 
 // Node-esque listener implementation.
 if (typeof module !== 'undefined') {
-  Module.on = Module.addListener = function(t, cb) {
-    if (!(t in Module._listeners)) {
-      Module._listeners[t] = []
+  WrenJS.on = WrenJS.addListener = function(t, cb) {
+    if (!(t in WrenJS._listeners)) {
+      WrenJS._listeners[t] = []
     }
-    Module._listeners[t].push(cb)
+    WrenJS._listeners[t].push(cb)
   }
-  Module.off = Module.removeListener = function(t, cb) {
-    if (!(t in Module._listeners)) {
+  WrenJS.off = WrenJS.removeListener = function(t, cb) {
+    if (!(t in WrenJS._listeners)) {
       return
     }
-    var stack = Module._listeners[t]
+    var stack = WrenJS._listeners[t]
     for (var i = 0, l = stack.length; i < l; i++) {
       if (stack[i] === cb) {
         stack.splice(i, 1)
@@ -476,32 +476,32 @@ if (typeof module !== 'undefined') {
       }
     }
   }
-  Module.emit = function(t) {
-    if (!(t in Module._listeners)) {
+  WrenJS.emit = function(t) {
+    if (!(t in WrenJS._listeners)) {
       return true
     }
-    var stack = Module._listeners[t].slice()
+    var stack = WrenJS._listeners[t].slice()
 
     for (var i = 0, l = stack.length; i < l; i++) {
-      stack[i].call(Module, t)
+      stack[i].call(WrenJS, t)
     }
   }
-  module.exports = Module
+  module.exports = WrenJS
 }
 
-Module._VMs = {}
-Module._addVM = function(vm) {
-  return Module._VMs[vm.ID] = vm
+WrenJS._VMs = {}
+WrenJS._addVM = function(vm) {
+  return WrenJS._VMs[vm.ID] = vm
 }
 
-Module.freeVM = function(id) {
-  if (Module._VMs[id]) {
-    Module._freeWrenVM(id)
-    delete Module._VMs[id]
+WrenJS.freeVM = function(id) {
+  if (WrenJS._VMs[id]) {
+    WrenJS._freeWrenVM(id)
+    delete WrenJS._VMs[id]
   }
 }
-Module.getVM = function(id) {
-  return Module._VMs[id]
+WrenJS.getVM = function(id) {
+  return WrenJS._VMs[id]
 }
 
 /**
@@ -509,28 +509,26 @@ Module.getVM = function(id) {
  * @param {object} config Provides a config object that can contain errorFn and/or writeFn.
  * @returns {WrenVM}
  */
-Module.newVM = function(config) {
-  return Module._addVM(new WrenVM(Module._makeWrenVM(), config || {}))
+WrenJS.newVM = function(config) {
+  return WrenJS._addVM(new WrenVM(WrenJS._makeWrenVM(), config || {}))
 }
 
 // Let's add a listener for ready ourselves so we can get appropriate constants
-Module.on('ready', function() {
+WrenJS.on('ready', function() {
   // Get our WrenInterpretResults
-  Module.RESULT_COMPILE_ERROR = Module._getWrenResultCompileError()
-  Module.RESULT_RUNTIME_ERROR = Module._getWrenResultRuntimeError()
-  Module.RESULT_SUCCESS       = Module._getWrenResultSuccess()
+  WrenJS.RESULT_COMPILE_ERROR = WrenJS._getWrenResultCompileError()
+  WrenJS.RESULT_RUNTIME_ERROR = WrenJS._getWrenResultRuntimeError()
+  WrenJS.RESULT_SUCCESS       = WrenJS._getWrenResultSuccess()
   // Get our WrenTypes
-  Module.TYPE_BOOL            = Module._getWrenTypeBool()
-  Module.TYPE_NUM             = Module._getWrenTypeNum()
-  Module.TYPE_FOREIGN         = Module._getWrenTypeForeign()
-  Module.TYPE_LIST            = Module._getWrenTypeList()
-  Module.TYPE_NULL            = Module._getWrenTypeNull()
-  Module.TYPE_STRING          = Module._getWrenTypeString()
-  Module.TYPE_UNKNOWN         = Module._getWrenTypeUnknown()
+  WrenJS.TYPE_BOOL            = WrenJS._getWrenTypeBool()
+  WrenJS.TYPE_NUM             = WrenJS._getWrenTypeNum()
+  WrenJS.TYPE_FOREIGN         = WrenJS._getWrenTypeForeign()
+  WrenJS.TYPE_LIST            = WrenJS._getWrenTypeList()
+  WrenJS.TYPE_NULL            = WrenJS._getWrenTypeNull()
+  WrenJS.TYPE_STRING          = WrenJS._getWrenTypeString()
+  WrenJS.TYPE_UNKNOWN         = WrenJS._getWrenTypeUnknown()
   // Get our WrenErrorTypes
-  Module.ERROR_COMPILE        = Module._getWrenErrorCompile()
-  Module.ERROR_RUNTIME        = Module._getWrenErrorRuntime()
-  Module.ERROR_STACK_TRACE    = Module._getWrenErrorStackTrace()
+  WrenJS.ERROR_COMPILE        = WrenJS._getWrenErrorCompile()
+  WrenJS.ERROR_RUNTIME        = WrenJS._getWrenErrorRuntime()
+  WrenJS.ERROR_STACK_TRACE    = WrenJS._getWrenErrorStackTrace()
 })
-
-})()

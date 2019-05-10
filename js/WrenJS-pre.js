@@ -1,11 +1,9 @@
-(function(){
-var Module = {
-  noInitialRun: true,
-  postRun: function() {
-    if (Module.dispatchEvent) {
-      Module.dispatchEvent(new CustomEvent("ready"));
-    } else if (Module.emit) {
-      Module.emit("ready")
-    }
+WrenJS.noInitialRun = true
+
+WrenJS.postRun = function() {
+  if (WrenJS.dispatchEvent) {
+    WrenJS.dispatchEvent(new CustomEvent("ready"));
+  } else if (WrenJS.emit) {
+    WrenJS.emit("ready")
   }
 }
