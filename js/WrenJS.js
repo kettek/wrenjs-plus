@@ -1,16 +1,42 @@
+/**
+ * @fileoverview LibraryWren provides the JavaScript functions available to C.
+ * @package
+ */
 var LibraryWren = {
+  /**
+   * Provides the C to WrenJS to WrenVM interface for handling Wren's error function.
+   * @param {number} id 
+   * @param {number} type 
+   * @param {string} module 
+   * @param {number} line 
+   * @param {string} message 
+   */
   WrenJS_errorFn: function(id, type, module, line, message) {
     var vm = Module.getVM(id)
     if (vm) {
       vm.errorFn(type, UTF8ToString(module), line, UTF8ToString(message))
     }
   },
+  /**
+   * Provides the C to WrenJS to WrenVM interface for handling Wren's write function.
+   * @param {number} id 
+   * @param {string} text 
+   */
   WrenJS_writeFn: function(id, text) {
     var vm = Module.getVM(id)
     if (vm) {
       vm.writeFn(UTF8ToString(text))
     }
   },
+  /** 
+   * Returns a VM's foreign method to C.
+   * @param {number} id 
+   * @param {string} module 
+   * @param {string} className 
+   * @param {boolean} isStatic 
+   * @param {string} signature 
+   * @return {function}
+   */
   WrenJS_getForeignMethod: function(id, module, className, isStatic, signature) {
     var vm = Module.getVM(id)
     if (vm) {
@@ -20,6 +46,13 @@ var LibraryWren = {
     }
     return 0
   },
+  /**
+   * Returns a VM's foreign class allocator to C.
+   * @param {number} id 
+   * @param {string} module 
+   * @param {string} className 
+   * @return {function}
+   */
   WrenJS_getForeignClassAllocator: function(id, module, className) {
     var vm = Module.getVM(id)
     if (vm) {
@@ -27,6 +60,13 @@ var LibraryWren = {
     }
     return 0
   },
+  /**
+   * Returns a VM's foreign class finalizer(destructor) to C.
+   * @param {number} id 
+   * @param {string} module 
+   * @param {string} className 
+   * @return {function}
+   */
   WrenJS_getForeignClassFinalizer: function(id, module, className) {
     var vm = Module.getVM(id)
     if (vm) {
@@ -34,8 +74,12 @@ var LibraryWren = {
     }
     return 0
   },
-  // isFileAvailable checks if the given file path exists as the target of a script tag.
-  // This is only used if WrenJS+ was built with IMPORT_FROM_FETCH and defined LIMIT_FETCH_TO_SCRIPTS.
+  /**
+   * Returns whether or not a file has been defined as a wren script in the document's head.
+   * This is not used if WrenJS+ was built with ALLOW_NONSCRIPT_FETCH.
+   * @param {string} file 
+   * @return {boolean}
+   */
   WrenJS_isFileAvailable: function(file) {
     file = UTF8ToString(file)
     var wrenScripts = Array.from(document.head.getElementsByTagName("script"))
@@ -46,8 +90,14 @@ var LibraryWren = {
     }
     return false
   },
-  // importFileFromVM is a call to request a VM-defined wren `import "..."`.
-  // This is only used if WrenJS+ was built with IMPORT_FROM_JSVM.
+  /**
+   * Requests a VM-defined result for a Wren import statement.
+   * This is not used if WrenJS+ was built with DISABLE_JSVM_IMPORT.
+   * @param {number} vm 
+   * @param {string} file 
+   * @param {number} return_string 
+   * @param {number} return_bytes 
+   */
   WrenJS_importFileFromVM: function(vm, file, return_string, return_bytes) {
     var vm = Module.getVM(vm)
     if (vm) {
