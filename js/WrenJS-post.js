@@ -18,7 +18,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 /**
  * WrenVM provides an object-oriented interface to the underlying Wren VM.
  * 
- * @class WrenVM
  * @example
  * WrenJS.addEventListener('ready', () => {
  *   var vm = WrenJS.newVM({
@@ -49,10 +48,24 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 class WrenVM {
   /**
+   * Callback for WrenVM's writeFn.
+   * @callback writeFn
+   * @param {string} message - The string to output.
+   */
+  /**
+   * Callback for WrenVM's errorFn.
+   * @callback errorFn
+   * @param {WrenJS.WrenErrorType} type - The type of error.
+   * @param {string} module - The module that originated the error.
+   * @param {number} line - The line on which the error occurred.
+   * @param {string} message - The error message.
+   */
+  /**
    * Creates a WrenVM instance. This should only be called through WrenJS.newVM().
-   * @see WrenJS
    * @param {number} id This is the emscripten numerical pointer to a WrenVM instance.
    * @param {object} config This optional object can provide a writeFn(string) or an errorFn(type, module, line, message) handler.
+   * @param {writeFn} config.writeFn
+   * @param {errorFn} config.errorFn
    */
   constructor(id, config) {
     this.ID = id
@@ -601,7 +614,6 @@ WrenJS.getVM = function(id) {
  * @param {object} config Provides a config object that can contain errorFn and/or writeFn.
  * @returns {WrenVM}
  * @memberof WrenJS
- * @see WrenVM
  */
 WrenJS.newVM = function(config) {
   return WrenJS._addVM(new WrenVM(WrenJS._makeWrenVM(), config || {}))
@@ -610,10 +622,30 @@ WrenJS.newVM = function(config) {
 // Let's add a listener for ready ourselves so we can get appropriate constants
 WrenJS.on('ready', function() {
   // Get our WrenInterpretResults
+  /**
+   * WrenInterpretResult is the resulting value of a call to WrenVM.interpret.
+   * @typedef {number} WrenInterpretResult
+   * @property {number} [RESULT_COMPILE_ERROR] Compilation error.
+   * @property {number} [RESULT_RUNTIME_ERROR] Runtime error.
+   * @property {number} [RESULT_SUCCESS] Success.
+   * @memberof WrenJS
+   */
   WrenJS.RESULT_COMPILE_ERROR = WrenJS._getWrenResultCompileError()
   WrenJS.RESULT_RUNTIME_ERROR = WrenJS._getWrenResultRuntimeError()
   WrenJS.RESULT_SUCCESS       = WrenJS._getWrenResultSuccess()
   // Get our WrenTypes
+  /**
+   * WrenType represents a WrenVM data type.
+   * @typedef {number} WrenType
+   * @property {number} [TYPE_BOOL] Boolean type.
+   * @property {number} [TYPE_NUM] Numerical type.
+   * @property {number} [TYPE_STRING] String type.
+   * @property {number} [TYPE_LIST] List type.
+   * @property {number} [TYPE_FOREIGN] Foreign object type.
+   * @property {number} [TYPE_NULL] Null type.
+   * @property {number} [TYPE_UNKNOWN] Unknown type.
+   * @memberof WrenJS
+   */
   WrenJS.TYPE_BOOL            = WrenJS._getWrenTypeBool()
   WrenJS.TYPE_NUM             = WrenJS._getWrenTypeNum()
   WrenJS.TYPE_FOREIGN         = WrenJS._getWrenTypeForeign()
@@ -621,7 +653,15 @@ WrenJS.on('ready', function() {
   WrenJS.TYPE_NULL            = WrenJS._getWrenTypeNull()
   WrenJS.TYPE_STRING          = WrenJS._getWrenTypeString()
   WrenJS.TYPE_UNKNOWN         = WrenJS._getWrenTypeUnknown()
-  // Get our WrenErrorTypes
+  /**
+   * WrenErrorType represents a given error type that will be passed to
+   * WrenVM.errorFn.
+   * @typedef {number} WrenErrorType
+   * @property {number} [ERROR_COMPILE] Compile-time error.
+   * @property {number} [ERROR_RUNTIME] Run-time error.
+   * @property {number} [ERROR_STACK_TRACE] Stack-trace for a given error.
+   * @memberof WrenJS
+   */
   WrenJS.ERROR_COMPILE        = WrenJS._getWrenErrorCompile()
   WrenJS.ERROR_RUNTIME        = WrenJS._getWrenErrorRuntime()
   WrenJS.ERROR_STACK_TRACE    = WrenJS._getWrenErrorStackTrace()

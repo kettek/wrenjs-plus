@@ -3,97 +3,109 @@
 ### Table of Contents
 
 -   [WrenVM][1]
-    -   [Examples][2]
-    -   [interpret][3]
-        -   [Parameters][4]
-        -   [Examples][5]
-    -   [call][6]
-        -   [Parameters][7]
-        -   [Examples][8]
-    -   [free][9]
-    -   [addForeignMethod][10]
-        -   [Parameters][11]
-        -   [Examples][12]
-    -   [addForeignClassMethods][13]
-        -   [Parameters][14]
-        -   [Examples][15]
-    -   [ensureSlots][16]
-        -   [Parameters][17]
-    -   [getSlotCount][18]
-    -   [getSlotType][19]
-        -   [Parameters][20]
-    -   [getSlotDouble][21]
-        -   [Parameters][22]
-    -   [setSlotDouble][23]
-        -   [Parameters][24]
-    -   [getSlotString][25]
-        -   [Parameters][26]
-    -   [setSlotString][27]
-        -   [Parameters][28]
-    -   [getSlotBytes][29]
-        -   [Parameters][30]
-    -   [setSlotBytes][31]
-        -   [Parameters][32]
-    -   [getSlotBool][33]
-        -   [Parameters][34]
-    -   [setSlotBool][35]
-        -   [Parameters][36]
-    -   [setSlotNull][37]
-        -   [Parameters][38]
-    -   [getSlotForeign][39]
-        -   [Parameters][40]
-    -   [setSlotNewForeign][41]
-        -   [Parameters][42]
-    -   [setSlotNewList][43]
-        -   [Parameters][44]
-    -   [getListCount][45]
-        -   [Parameters][46]
-    -   [getListElement][47]
-        -   [Parameters][48]
-    -   [insertInList][49]
-        -   [Parameters][50]
-    -   [getVariable][51]
-        -   [Parameters][52]
-    -   [getSlotHandle][53]
-        -   [Parameters][54]
-    -   [setSlotHandle][55]
-        -   [Parameters][56]
-    -   [makeCallHandle][57]
-        -   [Parameters][58]
-        -   [Examples][59]
-    -   [releaseHandle][60]
-        -   [Parameters][61]
-    -   [collectGarbage][62]
-    -   [abortFiber][63]
-        -   [Parameters][64]
-    -   [importFile][65]
-        -   [Parameters][66]
-        -   [Examples][67]
-    -   [importFiles][68]
-        -   [Parameters][69]
-        -   [Examples][70]
--   [WrenJS][71]
-    -   [newVM][72]
-        -   [Parameters][73]
--   [LibraryWren][74]
-    -   [WrenJS_errorFn][75]
-        -   [Parameters][76]
-    -   [WrenJS_writeFn][77]
-        -   [Parameters][78]
-    -   [WrenJS_getForeignMethod][79]
-        -   [Parameters][80]
-    -   [WrenJS_getForeignClassAllocator][81]
-        -   [Parameters][82]
-    -   [WrenJS_getForeignClassFinalizer][83]
-        -   [Parameters][84]
-    -   [WrenJS_isFileAvailable][85]
-        -   [Parameters][86]
-    -   [WrenJS_importFileFromVM][87]
-        -   [Parameters][88]
+    -   [Parameters][2]
+    -   [Examples][3]
+    -   [interpret][4]
+        -   [Parameters][5]
+        -   [Examples][6]
+    -   [call][7]
+        -   [Parameters][8]
+        -   [Examples][9]
+    -   [free][10]
+    -   [addForeignMethod][11]
+        -   [Parameters][12]
+        -   [Examples][13]
+    -   [addForeignClassMethods][14]
+        -   [Parameters][15]
+        -   [Examples][16]
+    -   [ensureSlots][17]
+        -   [Parameters][18]
+    -   [getSlotCount][19]
+    -   [getSlotType][20]
+        -   [Parameters][21]
+    -   [getSlotDouble][22]
+        -   [Parameters][23]
+    -   [setSlotDouble][24]
+        -   [Parameters][25]
+    -   [getSlotString][26]
+        -   [Parameters][27]
+    -   [setSlotString][28]
+        -   [Parameters][29]
+    -   [getSlotBytes][30]
+        -   [Parameters][31]
+    -   [setSlotBytes][32]
+        -   [Parameters][33]
+    -   [getSlotBool][34]
+        -   [Parameters][35]
+    -   [setSlotBool][36]
+        -   [Parameters][37]
+    -   [setSlotNull][38]
+        -   [Parameters][39]
+    -   [getSlotForeign][40]
+        -   [Parameters][41]
+    -   [setSlotNewForeign][42]
+        -   [Parameters][43]
+    -   [setSlotNewList][44]
+        -   [Parameters][45]
+    -   [getListCount][46]
+        -   [Parameters][47]
+    -   [getListElement][48]
+        -   [Parameters][49]
+    -   [insertInList][50]
+        -   [Parameters][51]
+    -   [getVariable][52]
+        -   [Parameters][53]
+    -   [getSlotHandle][54]
+        -   [Parameters][55]
+    -   [setSlotHandle][56]
+        -   [Parameters][57]
+    -   [makeCallHandle][58]
+        -   [Parameters][59]
+        -   [Examples][60]
+    -   [releaseHandle][61]
+        -   [Parameters][62]
+    -   [collectGarbage][63]
+    -   [abortFiber][64]
+        -   [Parameters][65]
+    -   [importFile][66]
+        -   [Parameters][67]
+        -   [Examples][68]
+    -   [importFiles][69]
+        -   [Parameters][70]
+        -   [Examples][71]
+-   [WrenJS][72]
+    -   [newVM][73]
+        -   [Parameters][74]
+    -   [WrenInterpretResult][75]
+        -   [Properties][76]
+    -   [WrenType][77]
+        -   [Properties][78]
+    -   [WrenErrorType][79]
+        -   [Properties][80]
+-   [LibraryWren][81]
+    -   [WrenJS_errorFn][82]
+        -   [Parameters][83]
+    -   [WrenJS_writeFn][84]
+        -   [Parameters][85]
+    -   [WrenJS_getForeignMethod][86]
+        -   [Parameters][87]
+    -   [WrenJS_getForeignClassAllocator][88]
+        -   [Parameters][89]
+    -   [WrenJS_getForeignClassFinalizer][90]
+        -   [Parameters][91]
+    -   [WrenJS_isFileAvailable][92]
+        -   [Parameters][93]
+    -   [WrenJS_importFileFromVM][94]
+        -   [Parameters][95]
 
 ## WrenVM
 
 WrenVM provides an object-oriented interface to the underlying Wren VM.
+
+### Parameters
+
+-   `id` **[number][96]** This is the emscripten numerical pointer to a WrenVM instance.
+-   `config` **[object][97]** This optional object can provide a writeFn(string) or an errorFn(type, module, line, message) handler.
 
 ### Examples
 
@@ -132,8 +144,8 @@ Runs the VM interpreter in the given module space with the provided source.
 
 #### Parameters
 
--   `module` **[string][89]** 
--   `source` **[string][89]** 
+-   `module` **[string][98]** 
+-   `source` **[string][98]** 
 
 #### Examples
 
@@ -143,7 +155,7 @@ vm.interpret('main', 'System.print("Hello, xorld!")').then(result => {
 })
 ```
 
-Returns **[Promise][90]** 
+Returns **[Promise][99]** 
 
 ### call
 
@@ -151,7 +163,7 @@ Calls the given handle. This presumes Wren slots have been set up appropriately.
 
 #### Parameters
 
--   `handle` **[number][91]** 
+-   `handle` **[number][96]** 
 
 #### Examples
 
@@ -173,11 +185,11 @@ Adds a foreign method to the VM.
 
 #### Parameters
 
--   `module` **[string][89]** 
--   `className` **[string][89]** 
+-   `module` **[string][98]** 
+-   `className` **[string][98]** 
 -   `isStatic` **bool** 
--   `signature` **[string][89]** 
--   `cb` **[function][92]** 
+-   `signature` **[string][98]** 
+-   `cb` **[function][100]** 
 
 #### Examples
 
@@ -195,10 +207,10 @@ Adds a foreign class allocator and finalizer.
 
 #### Parameters
 
--   `module` **[string][89]** 
--   `className` **[string][89]** 
--   `allocator` **[function][92]** 
--   `finalizer` **[function][92]** 
+-   `module` **[string][98]** 
+-   `className` **[string][98]** 
+-   `allocator` **[function][100]** 
+-   `finalizer` **[function][100]** 
 
 #### Examples
 
@@ -217,13 +229,13 @@ Ensures that the VM has the defined amount of slots available for use.
 
 #### Parameters
 
--   `count` **[number][91]** 
+-   `count` **[number][96]** 
 
 ### getSlotCount
 
 Gets the amount of slots currently used.
 
-Returns **[number][91]** 
+Returns **[number][96]** 
 
 ### getSlotType
 
@@ -231,9 +243,9 @@ Returns the WrenType stored in a given slot.
 
 #### Parameters
 
--   `slot` **[number][91]** 
+-   `slot` **[number][96]** 
 
-Returns **[number][91]** 
+Returns **[number][96]** 
 
 ### getSlotDouble
 
@@ -241,9 +253,9 @@ Returns a floating point number stored in a given slot.
 
 #### Parameters
 
--   `slot` **[number][91]** 
+-   `slot` **[number][96]** 
 
-Returns **[number][91]** 
+Returns **[number][96]** 
 
 ### setSlotDouble
 
@@ -251,8 +263,8 @@ Sets the given slot to the provided floating point number.
 
 #### Parameters
 
--   `slot` **[number][91]** 
--   `value` **[number][91]** 
+-   `slot` **[number][96]** 
+-   `value` **[number][96]** 
 
 ### getSlotString
 
@@ -260,9 +272,9 @@ Returns a string stored in the given slot.
 
 #### Parameters
 
--   `slot` **[number][91]** 
+-   `slot` **[number][96]** 
 
-Returns **[string][89]** 
+Returns **[string][98]** 
 
 ### setSlotString
 
@@ -270,8 +282,8 @@ Sets the given slot to the provided string.
 
 #### Parameters
 
--   `slot` **[number][91]** 
--   `string` **[string][89]** 
+-   `slot` **[number][96]** 
+-   `string` **[string][98]** 
 
 ### getSlotBytes
 
@@ -279,9 +291,9 @@ Returns a Uint8Array of bytes stored in the given slot.
 
 #### Parameters
 
--   `slot` **[number][91]** 
+-   `slot` **[number][96]** 
 
-Returns **[Uint8Array][93]** 
+Returns **[Uint8Array][101]** 
 
 ### setSlotBytes
 
@@ -289,8 +301,8 @@ Sets the given slot to the provided TypedArray. Provided data will be converted 
 
 #### Parameters
 
--   `slot` **[number][91]** 
--   `typedArray` **[TypedArray][94]** 
+-   `slot` **[number][96]** 
+-   `typedArray` **[TypedArray][102]** 
 
 ### getSlotBool
 
@@ -298,9 +310,9 @@ Returns the boolean value of a given slot.
 
 #### Parameters
 
--   `slot` **[number][91]** 
+-   `slot` **[number][96]** 
 
-Returns **[boolean][95]** 
+Returns **[boolean][103]** 
 
 ### setSlotBool
 
@@ -308,8 +320,8 @@ Sets the given slot to the provided boolean value.
 
 #### Parameters
 
--   `slot` **[number][91]** 
--   `value` **[boolean][95]** 
+-   `slot` **[number][96]** 
+-   `value` **[boolean][103]** 
 
 ### setSlotNull
 
@@ -317,7 +329,7 @@ Sets the given slot to null.
 
 #### Parameters
 
--   `slot` **[number][91]** 
+-   `slot` **[number][96]** 
 
 ### getSlotForeign
 
@@ -325,9 +337,9 @@ Returns a foreign object from the provided slot.
 
 #### Parameters
 
--   `slot` **[number][91]** 
+-   `slot` **[number][96]** 
 
-Returns **[number][91]** 
+Returns **[number][96]** 
 
 ### setSlotNewForeign
 
@@ -335,11 +347,11 @@ Sets the given slot to a new foreign object with an optional size for extra byte
 
 #### Parameters
 
--   `slot` **[number][91]** 
--   `classSlot` **[number][91]** 
--   `size` **[number][91]** 
+-   `slot` **[number][96]** 
+-   `classSlot` **[number][96]** 
+-   `size` **[number][96]** 
 
-Returns **[number][91]** pointer to the extra bytes.
+Returns **[number][96]** pointer to the extra bytes.
 
 ### setSlotNewList
 
@@ -347,7 +359,7 @@ Sets the given slot to a new list.
 
 #### Parameters
 
--   `slot` **[number][91]** 
+-   `slot` **[number][96]** 
 
 ### getListCount
 
@@ -355,9 +367,9 @@ Returns the number of items in a list in the given slot.
 
 #### Parameters
 
--   `slot` **[number][91]** 
+-   `slot` **[number][96]** 
 
-Returns **[number][91]** 
+Returns **[number][96]** 
 
 ### getListElement
 
@@ -365,9 +377,9 @@ Moves an element from the given listSlot's index to target elementSlot.
 
 #### Parameters
 
--   `listSlot` **[number][91]** 
--   `index` **[number][91]** 
--   `elementSlot` **[number][91]** 
+-   `listSlot` **[number][96]** 
+-   `index` **[number][96]** 
+-   `elementSlot` **[number][96]** 
 
 ### insertInList
 
@@ -375,9 +387,9 @@ Inserts the provided element in elementSlot into the index position in the list 
 
 #### Parameters
 
--   `slot` **[number][91]** 
--   `index` **[number][91]** 
--   `elementSlot` **[number][91]** 
+-   `slot` **[number][96]** 
+-   `index` **[number][96]** 
+-   `elementSlot` **[number][96]** 
 
 ### getVariable
 
@@ -385,9 +397,9 @@ Gets a variable of the provided name in a module and sets it to the given slot.
 
 #### Parameters
 
--   `module` **[string][89]** 
--   `name` **[string][89]** 
--   `slot` **[number][91]** 
+-   `module` **[string][98]** 
+-   `name` **[string][98]** 
+-   `slot` **[number][96]** 
 
 ### getSlotHandle
 
@@ -395,9 +407,9 @@ Returns the handle in the given slot.
 
 #### Parameters
 
--   `slot` **[number][91]** 
+-   `slot` **[number][96]** 
 
-Returns **[number][91]** 
+Returns **[number][96]** 
 
 ### setSlotHandle
 
@@ -405,8 +417,8 @@ Sets the given slot to the given handle.
 
 #### Parameters
 
--   `slot` **[number][91]** 
--   `handle` **[number][91]** 
+-   `slot` **[number][96]** 
+-   `handle` **[number][96]** 
 
 ### makeCallHandle
 
@@ -415,7 +427,7 @@ You must call `releaseHandle(handle)` before you free the VM.
 
 #### Parameters
 
--   `signature` **[string][89]** 
+-   `signature` **[string][98]** 
 
 #### Examples
 
@@ -427,7 +439,7 @@ vm.call(handle)
 vm.releaseHandle(handle)
 ```
 
-Returns **[number][91]** 
+Returns **[number][96]** 
 
 ### releaseHandle
 
@@ -435,7 +447,7 @@ Release the given handle from the VM.
 
 #### Parameters
 
--   `handle` **[number][91]** 
+-   `handle` **[number][96]** 
 
 ### collectGarbage
 
@@ -447,7 +459,7 @@ Aborts the fiber.
 
 #### Parameters
 
--   `slot` **[number][91]** 
+-   `slot` **[number][96]** 
 
 ### importFile
 
@@ -457,7 +469,7 @@ Does nothing if WrenJS+ was built with DISABLE_JSVM_IMPORT.
 
 #### Parameters
 
--   `file` **[string][89]** 
+-   `file` **[string][98]** 
 
 #### Examples
 
@@ -468,7 +480,7 @@ vm.importFile("wren/testImport.wren")
 })
 ```
 
-Returns **[Promise][90]** 
+Returns **[Promise][99]** 
 
 ### importFiles
 
@@ -476,7 +488,7 @@ Calls importFile(...) on an array of strings.
 
 #### Parameters
 
--   `files` **[Array][96]&lt;[string][89]>** 
+-   `files` **[Array][104]&lt;[string][98]>** 
 
 #### Examples
 
@@ -487,24 +499,63 @@ vm.importFiles(["wren/testImport.wren", "wren/testImport2.wren"])
 })
 ```
 
-Returns **[Promise][90]** 
+Returns **[Promise][99]** 
 
 ## WrenJS
 
 WrenJS is the interface through which Wren VMs are created. Be aware that this is actually an Emscripten Module.
-See [preamble.js][97] for additional information.
+See [preamble.js][105] for additional information.
 
 ### newVM
-
--   **See: WrenVM**
 
 Creates and returns a new WrenVM instance.
 
 #### Parameters
 
--   `config` **[object][98]** Provides a config object that can contain errorFn and/or writeFn.
+-   `config` **[object][97]** Provides a config object that can contain errorFn and/or writeFn.
 
-Returns **[WrenVM][99]** 
+Returns **[WrenVM][106]** 
+
+### WrenInterpretResult
+
+WrenInterpretResult is the resulting value of a call to WrenVM.interpret.
+
+Type: [number][96]
+
+#### Properties
+
+-   `RESULT_COMPILE_ERROR` **[number][96]?** Compilation error.
+-   `RESULT_RUNTIME_ERROR` **[number][96]?** Runtime error.
+-   `RESULT_SUCCESS` **[number][96]?** Success.
+
+### WrenType
+
+WrenType represents a WrenVM data type.
+
+Type: [number][96]
+
+#### Properties
+
+-   `TYPE_BOOL` **[number][96]?** Boolean type.
+-   `TYPE_NUM` **[number][96]?** Numerical type.
+-   `TYPE_STRING` **[number][96]?** String type.
+-   `TYPE_LIST` **[number][96]?** List type.
+-   `TYPE_FOREIGN` **[number][96]?** Foreign object type.
+-   `TYPE_NULL` **[number][96]?** Null type.
+-   `TYPE_UNKNOWN` **[number][96]?** Unknown type.
+
+### WrenErrorType
+
+WrenErrorType represents a given error type that will be passed to
+WrenVM.errorFn.
+
+Type: [number][96]
+
+#### Properties
+
+-   `ERROR_COMPILE` **[number][96]?** Compile-time error.
+-   `ERROR_RUNTIME` **[number][96]?** Run-time error.
+-   `ERROR_STACK_TRACE` **[number][96]?** Stack-trace for a given error.
 
 ## LibraryWren
 
@@ -516,11 +567,11 @@ Provides the C to WrenJS to WrenVM interface for handling Wren's error function.
 
 #### Parameters
 
--   `id` **[number][91]** 
--   `type` **[number][91]** 
--   `module` **[string][89]** 
--   `line` **[number][91]** 
--   `message` **[string][89]** 
+-   `id` **[number][96]** 
+-   `type` **[number][96]** 
+-   `module` **[string][98]** 
+-   `line` **[number][96]** 
+-   `message` **[string][98]** 
 
 ### WrenJS_writeFn
 
@@ -528,8 +579,8 @@ Provides the C to WrenJS to WrenVM interface for handling Wren's write function.
 
 #### Parameters
 
--   `id` **[number][91]** 
--   `text` **[string][89]** 
+-   `id` **[number][96]** 
+-   `text` **[string][98]** 
 
 ### WrenJS_getForeignMethod
 
@@ -537,13 +588,13 @@ Returns a VM's foreign method to C.
 
 #### Parameters
 
--   `id` **[number][91]** 
--   `module` **[string][89]** 
--   `className` **[string][89]** 
--   `isStatic` **[boolean][95]** 
--   `signature` **[string][89]** 
+-   `id` **[number][96]** 
+-   `module` **[string][98]** 
+-   `className` **[string][98]** 
+-   `isStatic` **[boolean][103]** 
+-   `signature` **[string][98]** 
 
-Returns **[function][92]** 
+Returns **[function][100]** 
 
 ### WrenJS_getForeignClassAllocator
 
@@ -551,11 +602,11 @@ Returns a VM's foreign class allocator to C.
 
 #### Parameters
 
--   `id` **[number][91]** 
--   `module` **[string][89]** 
--   `className` **[string][89]** 
+-   `id` **[number][96]** 
+-   `module` **[string][98]** 
+-   `className` **[string][98]** 
 
-Returns **[function][92]** 
+Returns **[function][100]** 
 
 ### WrenJS_getForeignClassFinalizer
 
@@ -563,11 +614,11 @@ Returns a VM's foreign class finalizer(destructor) to C.
 
 #### Parameters
 
--   `id` **[number][91]** 
--   `module` **[string][89]** 
--   `className` **[string][89]** 
+-   `id` **[number][96]** 
+-   `module` **[string][98]** 
+-   `className` **[string][98]** 
 
-Returns **[function][92]** 
+Returns **[function][100]** 
 
 ### WrenJS_isFileAvailable
 
@@ -576,9 +627,9 @@ This is not used if WrenJS+ was built with ALLOW_NONSCRIPT_FETCH.
 
 #### Parameters
 
--   `file` **[string][89]** 
+-   `file` **[string][98]** 
 
-Returns **[boolean][95]** 
+Returns **[boolean][103]** 
 
 ### WrenJS_importFileFromVM
 
@@ -587,205 +638,219 @@ This is not used if WrenJS+ was built with DISABLE_JSVM_IMPORT.
 
 #### Parameters
 
--   `vm` **[number][91]** 
--   `file` **[string][89]** 
--   `return_string` **[number][91]** 
--   `return_bytes` **[number][91]** 
+-   `vm` **[number][96]** 
+-   `file` **[string][98]** 
+-   `return_string` **[number][96]** 
+-   `return_bytes` **[number][96]** 
 
 [1]: #wrenvm
 
-[2]: #examples
+[2]: #parameters
 
-[3]: #interpret
+[3]: #examples
 
-[4]: #parameters
+[4]: #interpret
 
-[5]: #examples-1
+[5]: #parameters-1
 
-[6]: #call
+[6]: #examples-1
 
-[7]: #parameters-1
+[7]: #call
 
-[8]: #examples-2
+[8]: #parameters-2
 
-[9]: #free
+[9]: #examples-2
 
-[10]: #addforeignmethod
+[10]: #free
 
-[11]: #parameters-2
+[11]: #addforeignmethod
 
-[12]: #examples-3
+[12]: #parameters-3
 
-[13]: #addforeignclassmethods
+[13]: #examples-3
 
-[14]: #parameters-3
+[14]: #addforeignclassmethods
 
-[15]: #examples-4
+[15]: #parameters-4
 
-[16]: #ensureslots
+[16]: #examples-4
 
-[17]: #parameters-4
+[17]: #ensureslots
 
-[18]: #getslotcount
+[18]: #parameters-5
 
-[19]: #getslottype
+[19]: #getslotcount
 
-[20]: #parameters-5
+[20]: #getslottype
 
-[21]: #getslotdouble
+[21]: #parameters-6
 
-[22]: #parameters-6
+[22]: #getslotdouble
 
-[23]: #setslotdouble
+[23]: #parameters-7
 
-[24]: #parameters-7
+[24]: #setslotdouble
 
-[25]: #getslotstring
+[25]: #parameters-8
 
-[26]: #parameters-8
+[26]: #getslotstring
 
-[27]: #setslotstring
+[27]: #parameters-9
 
-[28]: #parameters-9
+[28]: #setslotstring
 
-[29]: #getslotbytes
+[29]: #parameters-10
 
-[30]: #parameters-10
+[30]: #getslotbytes
 
-[31]: #setslotbytes
+[31]: #parameters-11
 
-[32]: #parameters-11
+[32]: #setslotbytes
 
-[33]: #getslotbool
+[33]: #parameters-12
 
-[34]: #parameters-12
+[34]: #getslotbool
 
-[35]: #setslotbool
+[35]: #parameters-13
 
-[36]: #parameters-13
+[36]: #setslotbool
 
-[37]: #setslotnull
+[37]: #parameters-14
 
-[38]: #parameters-14
+[38]: #setslotnull
 
-[39]: #getslotforeign
+[39]: #parameters-15
 
-[40]: #parameters-15
+[40]: #getslotforeign
 
-[41]: #setslotnewforeign
+[41]: #parameters-16
 
-[42]: #parameters-16
+[42]: #setslotnewforeign
 
-[43]: #setslotnewlist
+[43]: #parameters-17
 
-[44]: #parameters-17
+[44]: #setslotnewlist
 
-[45]: #getlistcount
+[45]: #parameters-18
 
-[46]: #parameters-18
+[46]: #getlistcount
 
-[47]: #getlistelement
+[47]: #parameters-19
 
-[48]: #parameters-19
+[48]: #getlistelement
 
-[49]: #insertinlist
+[49]: #parameters-20
 
-[50]: #parameters-20
+[50]: #insertinlist
 
-[51]: #getvariable
+[51]: #parameters-21
 
-[52]: #parameters-21
+[52]: #getvariable
 
-[53]: #getslothandle
+[53]: #parameters-22
 
-[54]: #parameters-22
+[54]: #getslothandle
 
-[55]: #setslothandle
+[55]: #parameters-23
 
-[56]: #parameters-23
+[56]: #setslothandle
 
-[57]: #makecallhandle
+[57]: #parameters-24
 
-[58]: #parameters-24
+[58]: #makecallhandle
 
-[59]: #examples-5
+[59]: #parameters-25
 
-[60]: #releasehandle
+[60]: #examples-5
 
-[61]: #parameters-25
+[61]: #releasehandle
 
-[62]: #collectgarbage
+[62]: #parameters-26
 
-[63]: #abortfiber
+[63]: #collectgarbage
 
-[64]: #parameters-26
+[64]: #abortfiber
 
-[65]: #importfile
+[65]: #parameters-27
 
-[66]: #parameters-27
+[66]: #importfile
 
-[67]: #examples-6
+[67]: #parameters-28
 
-[68]: #importfiles
+[68]: #examples-6
 
-[69]: #parameters-28
+[69]: #importfiles
 
-[70]: #examples-7
+[70]: #parameters-29
 
-[71]: #wrenjs
+[71]: #examples-7
 
-[72]: #newvm
+[72]: #wrenjs
 
-[73]: #parameters-29
+[73]: #newvm
 
-[74]: #librarywren
+[74]: #parameters-30
 
-[75]: #wrenjs_errorfn
+[75]: #wreninterpretresult
 
-[76]: #parameters-30
+[76]: #properties
 
-[77]: #wrenjs_writefn
+[77]: #wrentype
 
-[78]: #parameters-31
+[78]: #properties-1
 
-[79]: #wrenjs_getforeignmethod
+[79]: #wrenerrortype
 
-[80]: #parameters-32
+[80]: #properties-2
 
-[81]: #wrenjs_getforeignclassallocator
+[81]: #librarywren
 
-[82]: #parameters-33
+[82]: #wrenjs_errorfn
 
-[83]: #wrenjs_getforeignclassfinalizer
+[83]: #parameters-31
 
-[84]: #parameters-34
+[84]: #wrenjs_writefn
 
-[85]: #wrenjs_isfileavailable
+[85]: #parameters-32
 
-[86]: #parameters-35
+[86]: #wrenjs_getforeignmethod
 
-[87]: #wrenjs_importfilefromvm
+[87]: #parameters-33
 
-[88]: #parameters-36
+[88]: #wrenjs_getforeignclassallocator
 
-[89]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[89]: #parameters-34
 
-[90]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[90]: #wrenjs_getforeignclassfinalizer
 
-[91]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+[91]: #parameters-35
 
-[92]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+[92]: #wrenjs_isfileavailable
 
-[93]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array
+[93]: #parameters-36
 
-[94]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/TypedArray
+[94]: #wrenjs_importfilefromvm
 
-[95]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[95]: #parameters-37
 
-[96]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+[96]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
 
-[97]: https://emscripten.org/docs/api_reference/preamble.js.html
+[97]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
 
-[98]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[98]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-[99]: #wrenvm
+[99]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
+
+[100]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+
+[101]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array
+
+[102]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/TypedArray
+
+[103]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+
+[104]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+
+[105]: https://emscripten.org/docs/api_reference/preamble.js.html
+
+[106]: #wrenvm
