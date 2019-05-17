@@ -33,7 +33,7 @@ WrenJS.on('ready', () => {
 })
 ```
 
-Of course, we can do much more than this, whether using `vm.call(handle)` to run a main loop or shuttling data between Wren and JavaScript via the various setters and getters provided by WrenJS+. Please read the API [here](TODO) and/or play with the examples [here](TODO).
+Of course, we can do much more than this, whether using `vm.call(handle)` to run a main loop or shuttling data between Wren and JavaScript via the various setters and getters provided by WrenJS+. Please read the API documentation [here](docs/API.md).
 
 ## Installation
 There are multiple ways to acquire WrenJS+.
@@ -56,7 +56,7 @@ WrenJS.on("ready", () => {
 })
 ```
 
-After the ready event is handled, you are free to use any of the [WrenJS and WrenVM APIs](API).
+After the ready event is handled, you are free to use any of the [WrenJS and WrenVM APIs](docs/API.md).
 
 ### Browser and Node environment differences
 When running under Node, WrenJS+ is exported as a require-able module and also provides Node-style event methods.

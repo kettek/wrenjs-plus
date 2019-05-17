@@ -15,11 +15,42 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-// WrenVM is the class that the user interacts with after creating one
-// via WrenJS.newVM(config).
+/**
+ * WrenVM provides an object-oriented interface to the underlying Wren VM.
+ * 
+ * @class WrenVM
+ * @example
+ * WrenJS.addEventListener('ready', () => {
+ *   var vm = WrenJS.newVM({
+ *     writeFn: (text) => {
+ *       console.log("stdout: %s", text)
+ *     },
+ *     errorFn: (type, module, line, message) => {
+ *       console.log("stderr(%d): %s %d %s", type, module, line, message)
+ *     }
+ *   })
+ *   vm.interpret("main", 'System.print("Hello, xorld!")')
+ *   .then(result => {
+ *     switch(result) {
+ *       case WrenJS.RESULT_COMPILE_ERROR:
+ *         console.log("Compilation error!")
+ *         break
+ *       case WrenJS.RESULT_RUNTIME_ERROR:
+ *         console.log("Runtime error!")
+ *         break
+ *       case WrenJS.RESULT_SUCCESS:
+ *         console.log("Success!")
+ *         break
+ *     }
+ *     // vm.call(...), etc.
+ *     vm.free()
+ *   })
+ * })
+ */
 class WrenVM {
   /**
-   * Constructor for WrenVM.
+   * Creates a WrenVM instance. This should only be called through WrenJS.newVM().
+   * @see WrenJS
    * @param {number} id This is the emscripten numerical pointer to a WrenVM instance.
    * @param {object} config This optional object can provide a writeFn(string) or an errorFn(type, module, line, message) handler.
    */
@@ -41,12 +72,15 @@ class WrenVM {
     this.importedFiles = {}
   }
 
-  // Interpret attempts to interpret the module and source. Returns a Promise with an argument of WrenInterpretResult
   /**
    * Runs the VM interpreter in the given module space with the provided source.
    * @param {string} module 
    * @param {string} source 
    * @returns {Promise}
+   * @example
+   * vm.interpret('main', 'System.print("Hello, xorld!")').then(result => {
+   *   // Handle result.
+   * })
    */
   interpret(module, source) {
     return Promise.resolve(this.interpretFn(this.ID, module, source))
@@ -54,6 +88,12 @@ class WrenVM {
   /**
    * Calls the given handle. This presumes Wren slots have been set up appropriately.
    * @param {number} handle 
+   * @example
+   * vm.ensureSlots(2)
+   * vm.getVariable("my_module", "myClass", 0)
+   * var handle = vm.makeCallHandle("classMethod()")
+   * vm.call(handle)
+   * vm.releaseHandle(handle)
    */
   call(handle) {
     return this.callFn(this.ID, handle)
@@ -73,6 +113,12 @@ class WrenVM {
    * @param {bool} isStatic 
    * @param {string} signature 
    * @param {function} cb 
+   * @example
+   * vm.addForeignMethod("wren/ForeignClass", "ForeignClass", 0, "add(_,_)", function() {
+   *   var a = vm.getSlotDouble(1)
+   *   var b = vm.getSlotDouble(2)
+   *   vm.setSlotDouble(0, a+b)
+   * })
    */
   addForeignMethod(module, className, isStatic, signature, cb) {
     if (!this.foreignFunctions[module]) {
@@ -96,6 +142,7 @@ class WrenVM {
    * @param {string} className 
    * @param {bool} isStatic 
    * @param {string} signature 
+   * @private
    */
   getForeignMethod(module, className, isStatic, signature) {
     if (!this.foreignFunctions[module]) {
@@ -118,6 +165,13 @@ class WrenVM {
    * @param {string} className 
    * @param {function} allocator 
    * @param {function} finalizer 
+   * @example
+   * vm.addForeignClassMethods("wren/ForeignClass", "ForeignClass", function() {
+   *   // Allocator
+   *   vm.setSlotNewForeign(0, 0, 0)
+   * }, function() {
+   *   // Finalizer
+   * })
    */
   addForeignClassMethods(module, className, allocator, finalizer) {
     if (!this.foreignClasses[module]) {
@@ -137,6 +191,7 @@ class WrenVM {
    * @param {string} module 
    * @param {string} className 
    * @returns {WrenForeignMethodFn}
+   * @private
    */
   getForeignClassAllocator(module, className) {
     if (!this.foreignClasses[module] || !this.foreignClasses[module][className]) {
@@ -149,18 +204,13 @@ class WrenVM {
    * @param {string} module 
    * @param {string} className 
    * @returns {WrenFinalizerFn}
+   * @private
    */
   getForeignClassFinalizer(module, className) {
     if (!this.foreignClasses[module] || !this.foreignClasses[module][className]) {
       return null
     }
     return this.foreignClasses[module][className].finalizer
-  }
-  /**
-   * Calls the VM's garbage collection routine.
-   */
-  collectGarbage() {
-    WrenJS._wrenCollectGarbage(this.ID)
   }
   /**
    * Ensures that the VM has the defined amount of slots available for use.
@@ -369,6 +419,12 @@ class WrenVM {
    * You must call `releaseHandle(handle)` before you free the VM.
    * @param {string} signature 
    * @returns {number}
+   * @example
+   * vm.ensureSlots(2)
+   * vm.getVariable("my_module", "myClass", 0)
+   * var handle = vm.makeCallHandle("foreignMethod()")
+   * vm.call(handle)
+   * vm.releaseHandle(handle)
    */
   makeCallHandle(signature) {
     var signatureLen = lengthBytesUTF8(signature)
@@ -388,21 +444,29 @@ class WrenVM {
     WrenJS._wrenReleaseHandle(this.ID, handle)
   }
   /**
+   * Calls the VM's garbage collection routine.
+   */
+  collectGarbage() {
+    WrenJS._wrenCollectGarbage(this.ID)
+  }
+  /**
    * Aborts the fiber.
    * @param {number} slot 
    */
   abortFiber(slot) {
     WrenJS._wrenAbortFiber(this.ID, slot)
   }
-  // importFile adds the given file as an importable module. It returns a Promise.
-  // Only usable if the "IMPORT_JSVM_ENABLED" flag is enabled during compilation.
-  // This _must_ be called before the interpret is called.
   /**
    * Loads a given file via XHR and adds it to the importedFiles map.
    * Must be called before interpreting.
    * Does nothing if WrenJS+ was built with DISABLE_JSVM_IMPORT.
    * @param {string} file 
    * @returns {Promise}
+   * @example
+   * vm.importFile("wren/testImport.wren")
+   * .then(result => {
+   *   vm.interpret(...)
+   * })
    */
   importFile(file) {
     return new Promise((resolve, reject) => {
@@ -424,6 +488,11 @@ class WrenVM {
    * Calls importFile(...) on an array of strings.
    * @param {string[]} files 
    * @returns {Promise}
+   * @example
+   * vm.importFiles(["wren/testImport.wren", "wren/testImport2.wren"])
+   * .then(result => {
+   *   vm.interpret(...)
+   * })
    */
   importFiles(files) {
     return Promise.all(files.map(file => this.importFile(file)))
@@ -432,12 +501,18 @@ class WrenVM {
    * Returns the string contents of an imported file.
    * @param {string} file 
    * @returns {string}
+   * @private
    */
   getImportedFile(file) {
     return this.importedFiles[file]
   }
 }
 
+/**
+ * WrenJS is the interface through which Wren VMs are created. Be aware that this is actually an Emscripten Module.
+ * See [preamble.js](https://emscripten.org/docs/api_reference/preamble.js.html) for additional information.
+ * @namespace WrenJS
+ */
 WrenJS._listeners = {}
 // Browser-esque listener implementation.
 if (typeof window !== 'undefined') {
@@ -525,6 +600,8 @@ WrenJS.getVM = function(id) {
  * Creates and returns a new WrenVM instance.
  * @param {object} config Provides a config object that can contain errorFn and/or writeFn.
  * @returns {WrenVM}
+ * @memberof WrenJS
+ * @see WrenVM
  */
 WrenJS.newVM = function(config) {
   return WrenJS._addVM(new WrenVM(WrenJS._makeWrenVM(), config || {}))
