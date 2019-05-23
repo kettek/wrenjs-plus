@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="../../dist/WrenJS+.js"></script>
+<script src="importedClass.wren" type="text/wren"></script>
+</head>
+<body>
+<pre id="wrenInput"><code>
+import "importedClass" for importedClass
+
+var instance = importedClass.new("Test")
+instance.printName()
+</code></pre>
+<pre id="wrenOutput"></pre>
+<pre id="wrenError"></pre>
+<script>
+let wrenInput   = document.getElementById("wrenInput")
+let wrenOutput  = document.getElementById("wrenOutput")
+let wrenError   = document.getElementById("wrenError")
+WrenJS.on('ready', () => {
+  let vm = WrenJS.newVM({
+    writeFn: text => {
+      wrenOutput.innerHTML += `output: ${text}\n`
+    },
+    errorFn: (type, module, line, message) => {
+      let typeName = ''
+      switch(type) {
+        case WrenJS.ERROR_COMPILE:
+          typeName = "Compilation Error"
+        break;
+        case WrenJS.ERROR_RUNTIME:
+          typeName = "Runtime Error"
+        break;
+        case WrenJS.ERROR_STACK_TRACE:
+          typeName = "Stack Trace"
+        break;
+      }
+      wrenError.innerHTML += `error: ${typeName}: ${module}:${line}: ${message}\n`
+    }
+  })
+
+  vm.interpret("imports", wrenInput.innerText).then(result => {
+    switch(result) {
+      case WrenJS.RESULT_COMPILE_ERROR:
+        console.log("Compilation error!")
+        break
+      case WrenJS.RESULT_RUNTIME_ERROR:
+        console.log("Runtime error!")
+        break
+      case WrenJS.RESULT_SUCCESS:
+        console.log("Success!")
+        break
+    }
+    vm.free()
+  })
+})
+</script>
+</body>
+</html>
