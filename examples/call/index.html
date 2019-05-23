@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../style.css" />
+<script src="../../dist/WrenJS+.js"></script>
+</head>
+<body>
+<textarea id="wrenInput">
+class MyClass {
+  construct new() {}
+  print(text) {
+    System.print("MyClass instance received: '%(text)'")
+  }
+}
+
+var classInstance = MyClass.new()
+</textarea>
+<pre id="wrenOutput"></pre>
+<pre id="wrenError"></pre>
+<script>
+let wrenInput   = document.getElementById("wrenInput")
+let wrenOutput  = document.getElementById("wrenOutput")
+let wrenError   = document.getElementById("wrenError")
+WrenJS.on('ready', () => {
+  let vm = WrenJS.newVM({
+    writeFn: text => {
+      wrenOutput.innerHTML += `${text}\n`
+    },
+    errorFn: (type, module, line, message) => {
+      let typeName = ''
+      switch(type) {
+        case WrenJS.ERROR_COMPILE:
+          typeName = "Compilation Error"
+        break;
+        case WrenJS.ERROR_RUNTIME:
+          typeName = "Runtime Error"
+        break;
+        case WrenJS.ERROR_STACK_TRACE:
+          typeName = "Stack Trace"
+        break;
+      }
+      wrenError.innerHTML += `${typeName}: ${module}:${line}: ${message}\n`
+    }
+  })
+
+  vm.interpret("call_module", wrenInput.value).then(result => {
+    switch(result) {
+      case WrenJS.RESULT_COMPILE_ERROR:
+        console.log("Compilation error!")
+        break
+      case WrenJS.RESULT_RUNTIME_ERROR:
+        console.log("Runtime error!")
+        break
+      case WrenJS.RESULT_SUCCESS:
+        console.log("Success!")
+        break
+    }
+    
+    vm.ensureSlots(2)
+    vm.getVariable("call_module", "classInstance", 0)
+    var handle = vm.makeCallHandle("print(_)")
+    vm.setSlotString(1, window.navigator.appVersion)
+    vm.call(handle)
+    vm.releaseHandle(handle)
+
+    vm.free()
+  })
+})
+</script>
+</body>
+</html>
