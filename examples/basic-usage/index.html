@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" type="text/css" href="../style.css" />
 <script src="../../dist/WrenJS+.js"></script>
 </head>
 <body>
-<pre id="wrenInput"><code>
+<textarea id="wrenInput">
 System.print("This example shows the usage of interpret.")
-</code></pre>
+</textarea>
 <pre id="wrenOutput"></pre>
 <pre id="wrenError"></pre>
 <script>
@@ -35,7 +36,7 @@ WrenJS.on('ready', () => {
     }
   })
 
-  vm.interpret("basic_usage", wrenInput.innerText).then(result => {
+  vm.interpret("basic_usage", wrenInput.value).then(result => {
     switch(result) {
       case WrenJS.RESULT_COMPILE_ERROR:
         console.log("Compilation error!")

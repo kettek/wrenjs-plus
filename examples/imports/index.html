@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" type="text/css" href="../style.css" />
 <script src="../../dist/WrenJS+.js"></script>
 <script src="importedClass.wren" type="text/wren"></script>
 </head>
 <body>
-<pre id="wrenInput"><code>
+<textarea id="wrenInput">
 import "importedClass" for importedClass
 
 var instance = importedClass.new("Test")
 instance.printName()
-</code></pre>
+</textarea>
 <pre id="wrenOutput"></pre>
 <pre id="wrenError"></pre>
 <script>
@@ -39,7 +40,7 @@ WrenJS.on('ready', () => {
     }
   })
 
-  vm.interpret("imports", wrenInput.innerText).then(result => {
+  vm.interpret("imports", wrenInput.value).then(result => {
     switch(result) {
       case WrenJS.RESULT_COMPILE_ERROR:
         console.log("Compilation error!")
