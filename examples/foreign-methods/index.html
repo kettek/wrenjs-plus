@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../style.css" />
+<script src="../../dist/WrenJS+.js"></script>
+</head>
+<body>
+<textarea id="wrenInput">
+/* Class with static foreign method */
+class ClassWithStaticForeignMethod {
+  foreign static addNumbers(a,b)
+}
+
+var result = ClassWithStaticForeignMethod.addNumbers(1,3)
+
+System.print("1 + 3 = %(result)")
+
+class ClassWithForeignMethod {
+  construct new() {}
+  foreign addNumbers(a,b)
+}
+
+/* Class with foreign method */
+
+var instance = ClassWithForeignMethod.new()
+
+var second_result = instance.addNumbers(3,4)
+
+System.print("3 + 4 = %(second_result)")
+</textarea>
+<hr>
+<pre id="wrenOutput"></pre>
+<pre id="wrenError"></pre>
+<script>
+let wrenInput   = document.getElementById("wrenInput")
+let wrenOutput  = document.getElementById("wrenOutput")
+let wrenError   = document.getElementById("wrenError")
+WrenJS.on('ready', () => {
+  let vm = WrenJS.newVM({
+    writeFn: text => {
+      wrenOutput.innerHTML += `${text}\n`
+    },
+    errorFn: (type, module, line, message) => {
+      let typeName = ''
+      switch(type) {
+        case WrenJS.ERROR_COMPILE:
+          typeName = "Compilation Error"
+        break;
+        case WrenJS.ERROR_RUNTIME:
+          typeName = "Runtime Error"
+        break;
+        case WrenJS.ERROR_STACK_TRACE:
+          typeName = "Stack Trace"
+        break;
+      }
+      wrenError.innerHTML += `${typeName}: ${module}:${line}: ${message}\n`
+    }
+  })
+
+  vm.addForeignMethod("foreign_methods", "ClassWithStaticForeignMethod", 1, "addNumbers(_,_)", function() {
+    var a = vm.getSlotDouble(1)
+    var b = vm.getSlotDouble(2)
+    vm.setSlotDouble(0, a+b)
+  })
+  vm.addForeignMethod("foreign_methods", "ClassWithForeignMethod", 0, "addNumbers(_,_)", function() {
+    var a = vm.getSlotDouble(1)
+    var b = vm.getSlotDouble(2)
+    vm.setSlotDouble(0, a+b)
+  })
+
+  vm.interpret("foreign_methods", wrenInput.value).then(result => {
+    switch(result) {
+      case WrenJS.RESULT_COMPILE_ERROR:
+        console.log("Compilation error!")
+        break
+      case WrenJS.RESULT_RUNTIME_ERROR:
+        console.log("Runtime error!")
+        break
+      case WrenJS.RESULT_SUCCESS:
+        console.log("Success!")
+        break
+    }
+    vm.free()
+  })
+})
+</script>
+</body>
+</html>
