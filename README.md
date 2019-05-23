@@ -80,6 +80,17 @@ When running under Node, WrenJS+ is exported as a require-able module and also p
 | `off(name, cb)` *or* `removeEventListener(name, cb)` | `off(name, cb)` *or* `removeListener(name, cb)`
 | `emit(event)` *or* `dispatchEvent(event)` | `emit(name)`
 
+### Import Methods
+Wren files can be imported, if desired, through a couple ways.
+
+#### VM-specific importing
+With default builds, Wren files can be imported relative to a specific VM instance by using the [importFile](https://github.com/kettek/wrenjs-plus/blob/master/docs/API.md#importfile) or [importFiles](https://github.com/kettek/wrenjs-plus/blob/master/docs/API.md#importfiles) methods. These simply use XHR in the browser to load all the files into strings that are stored on the VM instance itself.
+
+#### Fetching
+Wren files can also be imported by providing a properly annotated `script` tag and calling the standard Wren `import "myModule" for myClass` syntax. The annotation is: `<script type="text/wren" src="..."></script>`.
+
+If desired, Wren can be built without a `script` tag requirement, allowing it to request arbitrary files on the hosting web server. See the [ALLOW_NONSCRIPT_FETCH flag](#compilation-flags) for more information.
+
 ## Compilation
 WrenJS+ uses a [premake5](https://premake.github.io/) configuration file for managing its compilation and, as such, you must have it available in your PATH. If you wish to edit the `premake5.lua` file, you will find the important parts are commented.
 
