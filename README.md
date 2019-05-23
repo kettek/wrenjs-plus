@@ -77,7 +77,7 @@ Providing premake5 and emsdk are setup properly, building is extremely easy:
 
 ```
 # cd src
-# git pull https://github.com/wren-lang/wren.git
+# git clone https://github.com/wren-lang/wren.git
 ...
 # cd ..
 # premake5 gmake
