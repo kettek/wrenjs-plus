@@ -44,7 +44,7 @@ The first, and simplest, is to use a content delivery network:
 <script src="https://cdn.jsdelivr.net/gh/kettek/wrenjs-plus@v1.0.0/dist/WrenJS+.js"></script>
 ```
 
-The second is to download and use a [release provided on WrenJS+'s GitHub page](releases/).
+The second is to download and use a [release provided on WrenJS+'s GitHub page](https://github.com/kettek/wrenjs-plus/releases).
 
 The third is to pull this repository and compile `WrenJS+.js` yourself. This method is presented under [Compilation](#compilation).
 
