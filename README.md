@@ -49,14 +49,27 @@ The second is to download and use a [release provided on WrenJS+'s GitHub page](
 The third is to pull this repository and compile `WrenJS+.js` yourself. This method is presented under [Compilation](#compilation).
 
 ## Usage
-To use WrenJS+, you must supply a `ready` event listener to the WrenJS object.
+To use WrenJS+, you must supply a `ready` event listener to the WrenJS object. After this ready event is handled, you are free to use any of the [WrenJS and WrenVM APIs](docs/API.md).
+
+### Browser Example
 ```
+<script src="dist/WrenJS+.js"></script>
+<script>
 WrenJS.on("ready", () => {
-    // Create VMs, etc.
+  // Use WrenJS APIs
 })
+</script>
+
 ```
 
-After the ready event is handled, you are free to use any of the [WrenJS and WrenVM APIs](docs/API.md).
+### NodeJS Example
+```
+const WrenJS = require('./dist/WrenJS+.js')
+
+WrenJS.on("ready", () => {
+  // Use WrenJS APIs
+})
+```
 
 ### Browser and Node environment differences
 When running under Node, WrenJS+ is exported as a require-able module and also provides Node-style event methods.
