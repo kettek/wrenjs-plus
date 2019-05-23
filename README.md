@@ -111,3 +111,6 @@ Removing these will allow emscripten to run asynchronously which should be faste
 
 ### Node Compilation
 To compile for Node you must disable XHR fetching as emscripten's fetch system does not support the Node environment.
+
+### Building for file://
+To build for local file access, you must disable the use of WASM by adding `WASM=0` to the emscripten_flags list in the premake5.lua script and build using the debug config. e.g., `env config="debug" emmake make`.
