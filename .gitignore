@@ -5,3 +5,4 @@ emsdk
 src/wren
 Makefile
 *.make
+wren

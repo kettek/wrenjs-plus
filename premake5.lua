@@ -58,6 +58,7 @@ project "WrenJS+"
     'MODULARIZE_INSTANCE=1',
     [[EXPORT_NAME='WrenJS']],
     'FETCH=1',
+    --'WASM=0', -- Uncomment this for file:// debug builds
     'EMTERPRETIFY=1',
     'EMTERPRETIFY_ASYNC=1',
     [[EXTRA_EXPORTED_RUNTIME_METHODS="[']] .. table.concat(runtime_methods, "','") .. [[']"]],
