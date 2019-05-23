@@ -33,7 +33,7 @@ WrenJS.on('ready', () => {
 })
 ```
 
-Of course, we can do much more than this, whether using `vm.call(handle)` to run a main loop or shuttling data between Wren and JavaScript via the various setters and getters provided by WrenJS+. Please read the API documentation [here](docs/API.md).
+Of course, we can do much more than this, whether using `vm.call(handle)` to run a main loop or shuttling data between Wren and JavaScript via the various setters and getters provided by WrenJS+. Please read the API documentation [here](docs/API.md) or explore the [examples](https://kettek.github.io/wrenjs-plus/examples/).
 
 ## Installation
 There are multiple ways to acquire WrenJS+.
@@ -41,7 +41,7 @@ There are multiple ways to acquire WrenJS+.
 The first, and simplest, is to use a content delivery network:
 
 ```
-PUT CDN SCRIPT TAG HERE
+<script src="https://cdn.jsdelivr.net/gh/kettek/wrenjs-plus@v1.0.0/dist/WrenJS+.js"></script>
 ```
 
 The second is to download and use a [release provided on WrenJS+'s GitHub page](releases/).
