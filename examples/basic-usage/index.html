@@ -4,9 +4,13 @@
 <script src="../../dist/WrenJS+.js"></script>
 </head>
 <body>
+<pre id="wrenInput"><code>
+System.print("This example shows the usage of interpret.")
+</code></pre>
 <pre id="wrenOutput"></pre>
 <pre id="wrenError"></pre>
 <script>
+let wrenInput   = document.getElementById("wrenInput")
 let wrenOutput  = document.getElementById("wrenOutput")
 let wrenError   = document.getElementById("wrenError")
 WrenJS.on('ready', () => {
@@ -31,9 +35,7 @@ WrenJS.on('ready', () => {
     }
   })
 
-  vm.interpret("basic_usage", `
-System.print("This example shows the usage of interpret.")
-  `).then(result => {
+  vm.interpret("basic_usage", wrenInput.innerText).then(result => {
     switch(result) {
       case WrenJS.RESULT_COMPILE_ERROR:
         console.log("Compilation error!")
