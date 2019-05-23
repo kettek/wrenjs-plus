@@ -71,9 +71,9 @@ void getFile(const char *filename, char **recv, int *bytes) {
   fetch = emscripten_fetch(&attr, filename);
   while (fetchLock) emscripten_sleep(10);
   if (fetchSuccess) {
-    *recv = (char*)malloc(sizeof(char) * fetch->numBytes);
-    memcpy(*recv, (char*)fetch->data, fetch->numBytes);
-    *bytes = fetch->numBytes;
+    *recv = (char*)malloc(sizeof(char) * fetch->numBytes+1);
+    memcpy(*recv, (char*)fetch->data, fetch->numBytes+1);
+    *bytes = fetch->numBytes+1;
     (*recv)[*bytes-1] = '\0';
   } else {
     *recv = NULL;
